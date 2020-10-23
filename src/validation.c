@@ -1,5 +1,6 @@
 #include <libavformat/avformat.h>
 #include <libavutil/pixdesc.h>
+#include <libavutil/pixfmt.h>
 #include <stdbool.h>
 #include <string.h>
 
