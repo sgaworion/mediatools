@@ -1,6 +1,7 @@
 #include <libavformat/avformat.h>
 #include <stdio.h>
 #include "png.h"
+#include "util.h"
 
 int main(int argc, char *argv[])
 {
@@ -24,7 +25,7 @@ int main(int argc, char *argv[])
     const char *output = argv[3];
     AVRational time = av_d2q(atof(argv[2]), INT_MAX);
 
-    if (avformat_open_input(&format, input, NULL, NULL) != 0) {
+    if (open_input_correct_demuxer(&format, input) != 0) {
         printf("Couldn't read file\n");
         return -1;
     }

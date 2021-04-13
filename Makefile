@@ -5,7 +5,7 @@ LDFLAGS :=
 INSTALL ?= install
 PREFIX  ?= /usr/local
 
-COMMON_OBJECTS     := build/validation.o build/png.o
+COMMON_OBJECTS     := build/validation.o build/png.o build/util.o
 MEDIASTAT_OBJECTS  := build/stat.o
 MEDIATHUMB_OBJECTS := build/thumb.o
 

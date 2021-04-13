@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 #include "validation.h"
+#include "util.h"
 
 static int64_t start_time(AVStream *stream)
 {
@@ -34,7 +35,7 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    if (avformat_open_input(&format, argv[1], NULL, NULL) != 0) {
+    if (open_input_correct_demuxer(&format, argv[1]) != 0) {
         printf("Couldn't read file\n");
         return -1;
     }
