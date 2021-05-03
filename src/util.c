@@ -2,19 +2,21 @@
 
 static int valid_demuxer(AVInputFormat *fmt)
 {
-    // apng:     animated PNG
-    // png_pipe: static PNG
-    // image2:   JPEG
-    // gif:      GIF
-    // svg_pipe: SVG (recommended not to use this currently)
-    // matroska: MKV/WebM
+    // apng:      animated PNG
+    // png_pipe:  static PNG
+    // image2:    JPEG
+    // jpeg_pipe: JPEG
+    // gif:       GIF
+    // svg_pipe:  SVG (recommended not to use this currently)
+    // matroska:  MKV/WebM
 
     return
-      fmt == av_find_input_format("apng")     ||
-      fmt == av_find_input_format("png_pipe") ||
-      fmt == av_find_input_format("image2")   ||
-      fmt == av_find_input_format("gif")      ||
-      fmt == av_find_input_format("svg_pipe") ||
+      fmt == av_find_input_format("apng")      ||
+      fmt == av_find_input_format("png_pipe")  ||
+      fmt == av_find_input_format("image2")    ||
+      fmt == av_find_input_format("jpeg_pipe") ||
+      fmt == av_find_input_format("gif")       ||
+      fmt == av_find_input_format("svg_pipe")  ||
       fmt == av_find_input_format("matroska");
 }
 
