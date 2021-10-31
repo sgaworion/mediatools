@@ -29,7 +29,7 @@ int mediatools_write_frame_to_png(AVFrame *in_frame, const char *path)
     AVStream *vstream = NULL;
     AVFrame *out_frame = NULL;
     AVCodec *vcodec = NULL;
-    AVPacket pkt = { 0 };
+    AVPacket *pkt = NULL;
 
     int ret = -1;
 
@@ -68,7 +68,9 @@ int mediatools_write_frame_to_png(AVFrame *in_frame, const char *path)
     if (avformat_write_header(format, NULL) < 0)
         goto error;
 
-    av_init_packet(&pkt);
+    pkt = av_packet_alloc();
+    if (!pkt)
+        goto error;
 
     out_frame->format = AV_PIX_FMT_RGBA;
     out_frame->width = in_frame->width;
@@ -91,17 +93,17 @@ int mediatools_write_frame_to_png(AVFrame *in_frame, const char *path)
         goto error;
     if (avcodec_send_frame(vctx, NULL) < 0)
         goto error;
-    if (avcodec_receive_packet(vctx, &pkt) < 0)
+    if (avcodec_receive_packet(vctx, pkt) < 0)
         goto error;
 
-    pkt.stream_index = vstream->index;
-    pkt.pts = 1;
-    pkt.dts = 1;
+    pkt->stream_index = vstream->index;
+    pkt->pts = 1;
+    pkt->dts = 1;
 
-    if (av_write_frame(format, &pkt) < 0)
+    if (av_write_frame(format, pkt) < 0)
         goto error;
 
-    av_packet_unref(&pkt);
+    av_packet_unref(pkt);
 
     if (av_write_trailer(format) < 0)
         goto error;
@@ -111,6 +113,8 @@ int mediatools_write_frame_to_png(AVFrame *in_frame, const char *path)
 error:
     if (sws_ctx)
         sws_freeContext(sws_ctx);
+    if (pkt)
+        av_packet_free(&pkt);
     if (format->pb)
         avio_close(format->pb);
     if (vctx)
