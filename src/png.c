@@ -1,5 +1,6 @@
 #include <libavformat/avformat.h>
 #include <libswscale/swscale.h>
+#include <libavcodec/avcodec.h>
 #include "png.h"
 
 enum AVPixelFormat pix_fmt(AVFrame *in_frame)
