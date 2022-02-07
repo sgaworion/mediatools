@@ -1,3 +1,4 @@
+#include <libavcodec/avcodec.h>
 #include "util.h"
 
 static int valid_demuxer(AVInputFormat *fmt)
