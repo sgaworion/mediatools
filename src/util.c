@@ -1,7 +1,7 @@
 #include <libavcodec/avcodec.h>
 #include "util.h"
 
-static int valid_demuxer(AVInputFormat *fmt)
+static int valid_demuxer(const AVInputFormat *fmt)
 {
     // apng:      animated PNG
     // png_pipe:  static PNG
@@ -21,7 +21,7 @@ static int valid_demuxer(AVInputFormat *fmt)
       fmt == av_find_input_format("matroska");
 }
 
-static AVInputFormat *image2_demuxer()
+static const AVInputFormat *image2_demuxer()
 {
     return av_find_input_format("image2");
 }

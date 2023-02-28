@@ -6,10 +6,10 @@
 
 int main(int argc, char *argv[])
 {
+    const AVCodec *vcodec = NULL;
     AVFormatContext *format = NULL;
     AVCodecContext *vctx = NULL;
     AVStream *vstream = NULL;
-    AVCodec *vcodec = NULL;
     AVFrame *frame = NULL;
     AVPacket pkt;
 
