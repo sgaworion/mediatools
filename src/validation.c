@@ -63,7 +63,7 @@ static int validate_video_pixel_format(enum AVPixelFormat format)
     case AV_PIX_FMT_YUV420P12LE:
     case AV_PIX_FMT_YUV422P12LE:
     case AV_PIX_FMT_YUV444P12LE:
-    case AV_PIX_FMT_VDPAU_H264:
+    case AV_PIX_FMT_YUV420P10:
         return true;
 
     default:
