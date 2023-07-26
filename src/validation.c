@@ -63,6 +63,7 @@ static int validate_video_pixel_format(enum AVPixelFormat format)
     case AV_PIX_FMT_YUV420P12LE:
     case AV_PIX_FMT_YUV422P12LE:
     case AV_PIX_FMT_YUV444P12LE:
+    case AV_PIX_FMT_VDPAU_H264:
         return true;
 
     default:
@@ -157,6 +158,20 @@ int mediatools_validate_video(AVFormatContext *format)
                 return false;
             }
         }
+        } else if (strcmp(iformat->name, "mp4") == 0) {
+        switch (vpar->codec_id) {
+        default:
+            printf("Bad video codec for MP4 container (must be H264)\n");
+            return false;
+        case AV_CODEC_ID_H264:
+            ;
+        }
+
+        if (!validate_image_pixel_format(vpar->format)) {
+            printf("Found unsupported pixel format %s\n", av_get_pix_fmt_name(vpar->format));
+            return false;
+        }
+
     } else if (strcmp(iformat->name, "gif") == 0) {
         switch (vpar->codec_id) {
         default:
