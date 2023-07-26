@@ -19,8 +19,8 @@ static int valid_demuxer(const AVInputFormat *fmt)
       fmt == av_find_input_format("jpeg_pipe") ||
       fmt == av_find_input_format("gif")       ||
       fmt == av_find_input_format("svg_pipe")  ||
+      fmt == av_find_input_format("m4v")       ||
       fmt == av_find_input_format("matroska");
-      fmt == av_find_input_format("m4v");
 }
 
 static const AVInputFormat *image2_demuxer()
