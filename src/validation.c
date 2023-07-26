@@ -54,7 +54,6 @@ static int validate_video_pixel_format(enum AVPixelFormat format)
     switch (format) {
     // Video frame formats
     case AV_PIX_FMT_YUV420P:
-    case AV_PIX_FMT_YUV420P10:
     case AV_PIX_FMT_YUV420P10LE:
     case AV_PIX_FMT_YUV422P:
     case AV_PIX_FMT_YUV422P10LE:
