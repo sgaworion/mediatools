@@ -10,7 +10,7 @@ static int valid_demuxer(const AVInputFormat *fmt)
     // gif:       GIF
     // svg_pipe:  SVG (recommended not to use this currently)
     // matroska:  MKV/WebM
-    // m4v:       MP4       
+    // h264:      H264       
 
     return
       fmt == av_find_input_format("apng")      ||
@@ -19,7 +19,7 @@ static int valid_demuxer(const AVInputFormat *fmt)
       fmt == av_find_input_format("jpeg_pipe") ||
       fmt == av_find_input_format("gif")       ||
       fmt == av_find_input_format("svg_pipe")  ||
-      fmt == av_find_input_format("m4v")       ||
+      fmt == av_find_input_format("h264")       ||
       fmt == av_find_input_format("matroska");
 }
 
