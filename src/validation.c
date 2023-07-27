@@ -127,7 +127,7 @@ int mediatools_validate_video(AVFormatContext *format)
     if (astream_idx != -1)
         apar = format->streams[astream_idx]->codecpar;
 
-    if (strstr(iformat->name, "mp4")) {
+    if (strstr(iformat->name, "h264")) {
         switch (vpar->codec_id) {
         default:
             printf("Bad video codec for MP4 container\n");
