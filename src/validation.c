@@ -127,6 +127,15 @@ int mediatools_validate_video(AVFormatContext *format)
     if (astream_idx != -1)
         apar = format->streams[astream_idx]->codecpar;
 
+    if (strstr(iformat->name, "mv4")) {
+        switch (vpar->codec_id) {
+        default:
+            printf("Bad video codec for MP4 container\n");
+            return false;
+        case AV_CODEC_ID_H264:
+            ;
+        }}
+
     if (strstr(iformat->name, "matroska")) {
         switch (vpar->codec_id) {
         default:
@@ -156,14 +165,6 @@ int mediatools_validate_video(AVFormatContext *format)
                 printf("Found unsupported audio sample format %s\n", av_get_sample_fmt_name(apar->format));
                 return false;
             }
-        }
-        } else if (strcmp(iformat->name, "mp4") == 0) {
-        switch (vpar->codec_id) {
-        default:
-            printf("Bad video codec for MP4 container (must be H264)\n");
-            return false;
-        case AV_CODEC_ID_H264:
-            ;
         }
 
         if (!validate_image_pixel_format(vpar->format)) {
