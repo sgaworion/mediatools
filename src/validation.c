@@ -183,6 +183,19 @@ int mediatools_validate_video(AVFormatContext *format)
             printf("Found unsupported pixel format %s\n", av_get_pix_fmt_name(vpar->format));
             return false;
         }
+    } else if (strcmp(iformat->name, "mp4") == 0 || strcmp(iformat->name, "jpeg_pipe") == 0) {
+        switch (vpar->codec_id) {
+        default:
+            printf("Bad video codec for MP4 container\n");
+            return false;
+        case AV_CODEC_ID_H264:
+            ;
+        }
+
+        if (!validate_image_pixel_format(vpar->format)) {
+            printf("Found unsupported pixel format %s\n", av_get_pix_fmt_name(vpar->format));
+            return false;
+        }
     } else if (strcmp(iformat->name, "png_pipe") == 0 || strcmp(iformat->name, "apng") == 0) {
         switch (vpar->codec_id) {
         default:
