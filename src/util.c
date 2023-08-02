@@ -9,10 +9,6 @@
 #define STR_HELPER(x) #x
 #define STR(x) STR_HELPER(x)
 
-const char *mediatools_version() {
-    return g_mediatools_version;
-}
-
 static int valid_demuxer(const AVInputFormat *fmt)
 {
     // apng:      animated PNG
