@@ -128,6 +128,8 @@ int mediatools_validate_video(AVFormatContext *format)
         apar = format->streams[astream_idx]->codecpar;
     }
 
+    #ifdef MEDIATOOLS_ALLOW_MP4
+
     if (strstr(iformat->name, "mp4")) {
         switch (vpar->codec_id) {
             default:
@@ -140,6 +142,8 @@ int mediatools_validate_video(AVFormatContext *format)
 
     }
     else /* This becomes part of the following if statement */
+
+    #endif
 
     if (strstr(iformat->name, "matroska")) {
         switch (vpar->codec_id) {

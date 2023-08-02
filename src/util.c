@@ -11,7 +11,13 @@
 
 /* I hate this :3 */
 static const char *g_mediatools_version =
-    "Magic: "
+    "MP4: "
+        #ifdef MEDIATOOLS_ALLOW_MP4
+            "yes"
+        #else
+            "no"
+        #endif
+    ", Magic: "
         #ifdef MEDIASTAT_MAGIC
             "version " STR(MAGIC_VERSION)
         #else
@@ -43,8 +49,11 @@ static int valid_demuxer(const AVInputFormat *fmt)
       fmt == av_find_input_format("jpeg_pipe") ||
       fmt == av_find_input_format("gif")       ||
       fmt == av_find_input_format("svg_pipe")  ||
-      fmt == av_find_input_format("matroska")  || 
-      fmt == av_find_input_format("mp4");
+      fmt == av_find_input_format("matroska")  
+      #ifdef MEDIATOOLS_ALLOW_MP4
+        || fmt == av_find_input_format("mp4")
+      #endif
+      ;
 }
 
 static const AVInputFormat *image2_demuxer()
