@@ -74,7 +74,7 @@ enum mediatools_result_code mediastat_stat(const char *path, mediastat_result_t 
 
     if (!mediatools_validate_video(format)) {
         // Error is printed by validation function
-        return FORMAT_VALIDATE_ERROR;
+        return -1;
     }
 
     int vstream_idx = av_find_best_stream(format, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
