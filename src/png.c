@@ -24,12 +24,12 @@ enum AVPixelFormat pix_fmt(AVFrame *in_frame)
 int mediatools_write_frame_to_png(AVFrame *in_frame, const char *path)
 {
     struct SwsContext *sws_ctx = NULL;
-    AVFormatContext *format = NULL;
     const AVOutputFormat *png = NULL;
+    const AVCodec *vcodec = NULL;
+    AVFormatContext *format = NULL;
     AVCodecContext *vctx = NULL;
     AVStream *vstream = NULL;
     AVFrame *out_frame = NULL;
-    const AVCodec *vcodec = NULL;
     AVPacket *pkt = NULL;
 
     int ret = -1;
