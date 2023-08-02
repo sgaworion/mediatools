@@ -1,5 +1,5 @@
 RM      := rm -f
-CFLAGS  := -O3 -Wall -Wextra -pedantic -fpic -Isrc
+CFLAGS  := -O3 -Wall -fpic -Isrc
 LIBS    := -lavformat -lavutil -lavcodec -lswscale -lmagic -lrsvg-2
 LDFLAGS :=
 INSTALL ?= install
