@@ -105,32 +105,43 @@ int mediatools_validate_video(AVFormatContext *format)
         } else if (codecpar->codec_type == AVMEDIA_TYPE_SUBTITLE) {
             // Allow subtitles
         } else {
-            printf("Unknown codec type %s\n", av_get_media_type_string(codecpar->codec_type));
+            fprintf(stderr, "Unknown codec type %s\n", av_get_media_type_string(codecpar->codec_type));
             return false;
         }
     }
 
     if (num_vstreams != 1) {
-        printf("Found %lu video streams (must be 1)\n", num_vstreams);
+        fprintf(stderr, "Found %lu video streams (must be 1)\n", num_vstreams);
         return false;
     }
 
     if (num_astreams > 1) {
-        printf("Found %lu audio streams (must be 0 or 1)\n", num_astreams);
+        fprintf(stderr, "Found %lu audio streams (must be 0 or 1)\n", num_astreams);
         return false;
     }
 
     const AVInputFormat *iformat = format->iformat;
-    AVCodecParameters *vpar = format->streams[vstream_idx]->codecpar;
-    AVCodecParameters *apar = NULL;
+    const AVCodecParameters *vpar = format->streams[vstream_idx]->codecpar;
+    const AVCodecParameters *apar = NULL;
 
-    if (astream_idx != -1)
+    if (astream_idx != -1) {
         apar = format->streams[astream_idx]->codecpar;
+    }
+
+    if (strstr(iformat->name, "mp4")) {
+        switch (vpar->codec_id) {
+            default:
+                fprintf(stderr, "Bad format for MP4 container (must be H.264 or H.265)\n");
+                return false;
+            case AV_CODEC_ID_H264:
+            case AV_CODEC_ID_H265:
+                ;
+        }
 
     if (strstr(iformat->name, "matroska")) {
         switch (vpar->codec_id) {
         default:
-            printf("Bad video codec for WebM container (must be VP8 or VP9)\n");
+            fprintf(stderr, "Bad video codec for WebM container (must be VP8 or VP9)\n");
             return false;
         case AV_CODEC_ID_VP8:
         case AV_CODEC_ID_VP9:
@@ -138,14 +149,14 @@ int mediatools_validate_video(AVFormatContext *format)
         }
 
         if (!validate_video_pixel_format(vpar->format)) {
-            printf("Found unsupported pixel format %s\n", av_get_pix_fmt_name(vpar->format));
+            fprintf(stderr, "Found unsupported pixel format %s\n", av_get_pix_fmt_name(vpar->format));
             return false;
         }
 
         if (apar) {
             switch (apar->codec_id) {
             default:
-                printf("Bad audio codec for WebM container (must be Opus or Vorbis)\n");
+                fprintf(stderr, "Bad audio codec for WebM container (must be Opus or Vorbis)\n");
                 return false;
             case AV_CODEC_ID_VORBIS:
             case AV_CODEC_ID_OPUS:
@@ -153,40 +164,40 @@ int mediatools_validate_video(AVFormatContext *format)
             }
 
             if (!validate_audio_sample_format(apar->format)) {
-                printf("Found unsupported audio sample format %s\n", av_get_sample_fmt_name(apar->format));
+                fprintf(stderr, "Found unsupported audio sample format %s\n", av_get_sample_fmt_name(apar->format));
                 return false;
             }
         }
     } else if (strcmp(iformat->name, "gif") == 0) {
         switch (vpar->codec_id) {
         default:
-            printf("Bad video codec for GIF container (must be GIF)\n");
+            fprintf(stderr, "Bad video codec for GIF container (must be GIF)\n");
             return false;
         case AV_CODEC_ID_GIF:
             ;
         }
 
         if (!validate_image_pixel_format(vpar->format)) {
-            printf("Found unsupported pixel format %s\n", av_get_pix_fmt_name(vpar->format));
+            fprintf(stderr, "Found unsupported pixel format %s\n", av_get_pix_fmt_name(vpar->format));
             return false;
         }
     } else if (strcmp(iformat->name, "image2") == 0 || strcmp(iformat->name, "jpeg_pipe") == 0) {
         switch (vpar->codec_id) {
         default:
-            printf("Bad video codec for JPEG container (must be JPEG)\n");
+            fprintf(stderr, "Bad video codec for JPEG container (must be JPEG)\n");
             return false;
         case AV_CODEC_ID_MJPEG:
             ;
         }
 
         if (!validate_image_pixel_format(vpar->format)) {
-            printf("Found unsupported pixel format %s\n", av_get_pix_fmt_name(vpar->format));
+            fprintf(stderr, "Found unsupported pixel format %s\n", av_get_pix_fmt_name(vpar->format));
             return false;
         }
     } else if (strcmp(iformat->name, "png_pipe") == 0 || strcmp(iformat->name, "apng") == 0) {
         switch (vpar->codec_id) {
         default:
-            printf("Bad video codec for PNG container (must be PNG)\n");
+            fprintf(stderr, "Bad video codec for PNG container (must be PNG)\n");
             return false;
         case AV_CODEC_ID_PNG:
         case AV_CODEC_ID_APNG:
@@ -194,52 +205,29 @@ int mediatools_validate_video(AVFormatContext *format)
         }
 
         if (!validate_image_pixel_format(vpar->format)) {
-            printf("Found unsupported pixel format %s\n", av_get_pix_fmt_name(vpar->format));
+            fprintf(stderr, "Found unsupported pixel format %s\n", av_get_pix_fmt_name(vpar->format));
             return false;
         }
     } else if (strcmp(iformat->name, "svg_pipe") == 0) {
         switch (vpar->codec_id) {
         default:
-            printf("Bad video codec for SVG container (must be SVG)\n");
+            fprintf(stderr, "Bad video codec for SVG container (must be SVG)\n");
             return false;
         case AV_CODEC_ID_SVG:
             ;
         }
-    } else if (strcmp(iformat->name, "mov,mp4,m4a,3gp,3g2,mj2") == 0) {
-        switch (vpar->codec_id) {
-            default:
-                printf("Bad video codec for mp4 container (must be H.264 or HEVC)\n");
-                return false;
-            case AV_CODEC_ID_H264:
-            case AV_CODEC_ID_HEVC:
-            case AV_CODEC_ID_MPEG4:
-                ;
-        }
-        if (!validate_video_pixel_format(vpar->format)) {
-            printf("Found unsupported pixel format %s\n", av_get_pix_fmt_name(vpar->format));
-            return false;
-        }
-        if (apar) {
-            switch (apar->codec_id) {
-            default:
-                printf("Bad audio codec for Mp4 container (must be AAC or MP3)\n");
-                return false;
-            case AV_CODEC_ID_AAC:
-            case AV_CODEC_ID_MP3:
-                ;
-            }    
     } else {
-        printf("Unknown input format\n");
+        fprintf(stderr, "Unknown input format\n");
         return false;
     }
 
     if (vpar->width < 1 || vpar->width > 32767) {
-        printf("Invalid width %d\n", vpar->width);
+        fprintf(stderr, "Invalid width %d\n", vpar->width);
         return false;
     }
 
     if (vpar->height < 1 || vpar->height > 32767) {
-        printf("Invalid height %d\n", vpar->height);
+        fprintf(stderr, "Invalid height %d\n", vpar->height);
         return false;
     }
 
@@ -249,7 +237,7 @@ int mediatools_validate_video(AVFormatContext *format)
 int mediatools_validate_duration(AVRational dur)
 {
     if (av_cmp_q(dur, t_0h) < 0 || av_cmp_q(dur, t_1h) > 0) {
-        printf("Invalid duration (must be 0..1 hour)\n");
+        fprintf(stderr, "Invalid duration (must be 0..1 hour)\n");
         return false;
     }
 
