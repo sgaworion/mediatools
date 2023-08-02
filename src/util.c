@@ -2,12 +2,13 @@
 #include <libavutil/version.h>
 #include "util.h"
 
-#ifdef MEDIASTAT_MAGIC
-    #include <magic.h>
-#endif
-
 #define STR_HELPER(x) #x
 #define STR(x) STR_HELPER(x)
+
+
+const char *mediatools_version() {
+    return g_mediatools_version;
+}
 
 static int valid_demuxer(const AVInputFormat *fmt)
 {
@@ -27,8 +28,8 @@ static int valid_demuxer(const AVInputFormat *fmt)
       fmt == av_find_input_format("jpeg_pipe") ||
       fmt == av_find_input_format("gif")       ||
       fmt == av_find_input_format("svg_pipe")  ||
-      fmt == av_find_input_format("matroska")  || 
-      fmt == av_find_input_format("mp4");
+      fmt == av_find_input_format("matroska")  ||
+    fmt == av_find_input_format("mp4");
 }
 
 static const AVInputFormat *image2_demuxer()

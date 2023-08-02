@@ -237,7 +237,7 @@ int mediatools_validate_video(AVFormatContext *format)
 int mediatools_validate_duration(AVRational dur)
 {
     if (av_cmp_q(dur, t_0h) < 0 || av_cmp_q(dur, t_1h) > 0) {
-        printf("Invalid duration (must be 0..1 hour)\n");
+        fprintf(stderr, "Invalid duration (must be 0..1 hour)\n");
         return false;
     }
 
