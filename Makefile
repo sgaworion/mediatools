@@ -1,5 +1,5 @@
 RM      := rm -f
-CFLAGS  := -O3 -Wall -fpic -Isrc
+CFLAGS  := -O3 -Wall -Wextra -pedantic -D_FORTIFY_SOURCE=1 -DMEDIATOOLS_ALLOW_MP4 -DMEDIASTAT_MAGIC -fpic -Isrc
 LIBS    := -lavformat -lavutil -lavcodec -lswscale -lmagic -lrsvg-2
 LDFLAGS :=
 INSTALL ?= install

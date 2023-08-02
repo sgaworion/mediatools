@@ -138,6 +138,9 @@ int mediatools_validate_video(AVFormatContext *format)
                 ;
         }
 
+    }
+    else /* This becomes part of the following if statement */
+
     if (strstr(iformat->name, "matroska")) {
         switch (vpar->codec_id) {
         default:
